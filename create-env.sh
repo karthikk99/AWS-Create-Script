@@ -3,16 +3,16 @@
 # check the number of parameters passed.
 parameters=$#
 
-if [ $# -ne 2 ]
+if [ $# -ne 5 ]
 then
 echo "This script requires 2 parameters to be passed(Key name and security group).Please pass the right number of parameters and run the script again."
 
 else
-securitygroupid=$2
+securitygroupid=$3
 
 echo ""
 echo "Creating 3 EC2 micro instances........."
-aws ec2 run-instances --image-id ami-06b94666 --key-name $1 --security-group-id $2 --instance-type t2.micro --count 3 --user-data file://installenv.sh --placement AvailabilityZone=us-west-2b
+aws ec2 run-instances --image-id $1 --key-name $2 --security-group-id $3 --instance-type t2.micro --count $5 --user-data file://installenv.sh --placement AvailabilityZone=us-west-2b
 echo ""
 echo "Successfully created 3 instances."
 
@@ -41,13 +41,13 @@ echo "MY-LOAD-BALANCER is successfully created."
 
 echo ""
 echo "Creating Launch configuration named 'WEBSERVER'......."
-aws autoscaling create-launch-configuration --launch-configuration-name webserver --image-id ami-06b94666 --key-name $1 --instance-type t2.micro --user-data file://installenv.sh
+aws autoscaling create-launch-configuration --launch-configuration-name $4 --image-id ami-06b94666 --key-name $1 --instance-type t2.micro --user-data file://installenv.sh
 echo ""
 echo "Launch configuration 'WEBSERVER' is successfully created."
 
 echo ""
 echo "Creating a auto-scaling-group named 'WEBSERVERDEMO' with min-size 1 max-size 5 desired capacity 1........"
-aws autoscaling create-auto-scaling-group --auto-scaling-group-name webserverdemo --launch-configuration webserver --availability-zone us-west-2b --max-size 5 --min-size 1 --desired-capacity 1
+aws autoscaling create-auto-scaling-group --auto-scaling-group-name webserverdemo --launch-configuration $4 --availability-zone us-west-2b --max-size 5 --min-size 1 --desired-capacity 1
 echo ""
 echo "WEBSERVERDEMO is successfully created."
 
@@ -65,7 +65,7 @@ echo "Instances successfully attached to the auto-scaling-group"
 
 echo ""
 echo "Updating the auto-scaling-group to the new desired capacity value"
-aws autoscaling update-auto-scaling-group --auto-scaling-group-name webserverdemo --launch-configuration-name webserver --min-size 1 --max-size 5 --desired-capacity 4 --availability-zones us-west-2b
+aws autoscaling update-auto-scaling-group --auto-scaling-group-name webserverdemo --launch-configuration-name $4 --min-size 1 --max-size 5 --desired-capacity 4 --availability-zones us-west-2b
 
 
 echo ""
