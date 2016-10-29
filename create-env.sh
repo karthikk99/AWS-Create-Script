@@ -5,7 +5,7 @@ parameters=$#
 
 if [ $# -ne 5 ]
 then
-echo "This script requires 2 parameters to be passed(Key name and security group).Please pass the right number of parameters and run the script again."
+echo "This script requires 5 parameters to be passed(Key name and security group).Please pass the right number of parameters and run the script again."
 
 else
 securitygroupid=$3
