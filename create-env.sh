@@ -41,7 +41,7 @@ echo "MY-LOAD-BALANCER is successfully created."
 
 echo ""
 echo "Creating Launch configuration......."
-aws autoscaling create-launch-configuration --launch-configuration-name $4 --image-id ami-06b94666 --key-name $1 --instance-type t2.micro --user-data file://installenv.sh
+aws autoscaling create-launch-configuration --launch-configuration-name $4 --image-id $1 --key-name $1 --instance-type t2.micro --user-data file://installenv.sh
 echo ""
 echo "Launch configuration 'WEBSERVER' is successfully created."
 
